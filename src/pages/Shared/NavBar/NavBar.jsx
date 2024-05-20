@@ -1,53 +1,68 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
+import { FaShoppingCart } from "react-icons/fa";
+import useCart from "../../../hooks/useCart";
+
+
 
 const NavBar = () => {
-   const {user, logOut} = useContext(AuthContext);
-
-   const handleLogOut = () =>{
-       logOut()
-       .then(()=>{
-         
-       })
-       .catch(error=>{
-        console.log(error)
-       })
-   }
+  const { user, logOut } = useContext(AuthContext);
+     const [cart] = useCart()
+     console.log(cart)
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const navLinks = (
     <>
       <li>
         {" "}
-        <NavLink to='/'>Home</NavLink>{" "}
+        <NavLink to="/">Home</NavLink>{" "}
       </li>
       <li>
         {" "}
-        <NavLink to='/menu'>Menu</NavLink>{" "}
+        <NavLink to="/menu">Menu</NavLink>{" "}
       </li>
       <li>
         {" "}
-        <NavLink to='/order/salad'>Order Food</NavLink>{" "}
+        <NavLink to="/order/salad">Order Food</NavLink>{" "}
       </li>
       <li>
         {" "}
-        <NavLink to='/secret'>Secret</NavLink>{" "}
-      </li>
-  
-       {
-          user ? <>
-            <span>{user?.displayName}</span>
-           <button onClick={handleLogOut} className="btn btn-ghost">LogOut</button> </> : <>
-               <li>
-        {" "}
-        <NavLink to='/login'>Login</NavLink>{" "}
+        <NavLink to="/secret">Secret</NavLink>{" "}
       </li>
       <li>
-        {" "}
-        <NavLink to='/signUp'>SignUp</NavLink>{" "}
+        <Link to="/dashboard/cart">
+          <button className="btn">
+          <FaShoppingCart className="mr-4" />
+            <div className="badge badge-secondary">+{cart.length}</div>
+          </button>
+        </Link>
       </li>
-           </>
-       }
-        
+
+      {user ? (
+        <>
+          {/* <span>{user?.displayName}</span> */}
+          <button onClick={handleLogOut} className="btn btn-ghost">
+            LogOut
+          </button>{" "}
+        </>
+      ) : (
+        <>
+          <li>
+            {" "}
+            <NavLink to="/login">Login</NavLink>{" "}
+          </li>
+          <li>
+            {" "}
+            <NavLink to="/signUp">SignUp</NavLink>{" "}
+          </li>
+        </>
+      )}
     </>
   );
   return (
